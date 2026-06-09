@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { ApiError } from "../api/client";
 import { useTickets } from "../context/TicketsContext";
+import { TriagingLoader } from "./TriagingLoader";
 import type { Ticket } from "../types";
 import styles from "./IntakeForm.module.css";
 
@@ -36,6 +37,10 @@ export function IntakeForm({ onTriaged }: Props) {
     } finally {
       setLoading(false);
     }
+  }
+
+  if (loading) {
+    return <TriagingLoader />;
   }
 
   return (
@@ -76,7 +81,7 @@ export function IntakeForm({ onTriaged }: Props) {
         className={styles.submit}
         disabled={!text.trim() || loading}
       >
-        {loading ? "Triaging…" : "Triage message"}
+        Triage message
       </button>
     </form>
   );
@@ -93,10 +98,10 @@ function toMessage(err: unknown): { message: string; hint?: string } {
       case "model":
         return {
           message: "The triage model is unavailable.",
-          hint: "Make sure Ollama is running and the model is pulled.",
+          hint: "Please try again later, if the problem persists contact the support team.",
         };
       case "network":
-        return { message: "Can't reach the server.", hint: "Is the backend running?" };
+        return { message: "Can't reach the server.", hint: "Contact the support team" };
       default:
         return { message: err.message };
     }
