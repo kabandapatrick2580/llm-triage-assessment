@@ -1,11 +1,11 @@
 import pytest
 
 from app import create_app
-from config import Config
+from config import BaseConfig
 from extensions import db
 
 
-class TestConfig(Config):
+class TestConfig(BaseConfig):
     SQLALCHEMY_DATABASE_URI = "sqlite:///:memory:"
     TESTING = True
 

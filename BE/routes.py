@@ -30,12 +30,7 @@ def triage():
         return jsonify({"success": False, "error": "Text is too long"}), 413
 
     try:
-        llm_output = triage_message(
-            text,
-            url=current_app.config["OLLAMA_URL"],
-            model=current_app.config["OLLAMA_MODEL"],
-            timeout=current_app.config["OLLAMA_TIMEOUT"],
-        )
+        llm_output = triage_message(text, current_app.config)
     except LLMError as exc:
         return jsonify({"success": False, "error": str(exc)}), 502
 

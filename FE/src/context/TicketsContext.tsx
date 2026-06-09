@@ -6,7 +6,12 @@ import {
   useMemo,
   useState,
 } from "react";
-import { ApiError, listTickets, triage as triageRequest } from "../api/client";
+import {
+  ApiError,
+  checkHealth,
+  listTickets,
+  triage as triageRequest,
+} from "../api/client";
 import type { Ticket } from "../types";
 
 type ModelStatus = "checking" | "online" | "offline";
@@ -54,9 +59,7 @@ export function TicketsProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     refresh();
     // Probe model availability for the sidebar status indicator.
-    fetch("/api/health")
-      .then((r) => setModelStatus(r.ok ? "online" : "offline"))
-      .catch(() => setModelStatus("offline"));
+    checkHealth().then((ok) => setModelStatus(ok ? "online" : "offline"));
   }, [refresh]);
 
   const value = useMemo<TicketsState>(

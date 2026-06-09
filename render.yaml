@@ -1,0 +1,26 @@
+# Backend (Flask) on Render's free tier. Infra-as-code: connect the repo and
+# Render reads this file. The frontend deploys separately (Cloudflare Pages /
+# Vercel) — see FE/README.md.
+services:
+  - type: web
+    name: triage-api
+    runtime: python
+    rootDir: BE
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn app:app --bind 0.0.0.0:$PORT --workers 2 --timeout 120
+    envVars:
+      - key: APP_ENV
+        value: production
+      - key: LLM_PROVIDER
+        value: openai
+      - key: LLM_API_URL
+        value: https://api.groq.com/openai/v1/chat/completions
+      - key: LLM_MODEL
+        value: llama-3.1-8b-instant
+      - key: LLM_API_KEY
+        sync: false          # set in the Render dashboard (secret)
+      - key: DATABASE_URI
+        sync: false          # free Postgres connection string (Neon / Supabase)
+      - key: FRONTEND_ORIGIN
+        sync: false          # e.g. https://your-frontend.pages.dev

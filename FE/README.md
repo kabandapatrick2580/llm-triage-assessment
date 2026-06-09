@@ -22,6 +22,16 @@ Open http://localhost:5173. `/api` is proxied to the backend during dev.
 npm run build    # type-check + production bundle into dist/
 ```
 
+## Deploy (production)
+
+Build is a static bundle — host it free on Cloudflare Pages / Vercel / Netlify
+(build command `npm run build`, output `dist/`). Two things differ from local:
+
+- Set `VITE_API_BASE_URL` to your deployed backend URL (see `.env.example`).
+  Locally it's left empty so the dev proxy handles `/api`.
+- `public/_redirects` is included so client-side routes (`/inbox`) resolve on
+  static hosts.
+
 ## Theming
 
 All brand colors and design tokens live in `src/styles/theme.css`. Change the

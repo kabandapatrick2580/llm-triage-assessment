@@ -1,6 +1,12 @@
 import type { Ticket, TicketPage } from "../types";
 
 /**
+ * Base URL for the API. Empty in local dev so the Vite proxy handles `/api`;
+ * set VITE_API_BASE_URL (e.g. https://your-backend.onrender.com) in production.
+ */
+export const API_BASE = import.meta.env.VITE_API_BASE_URL ?? "";
+
+/**
  * Thrown for any non-2xx response. `kind` lets the UI tailor its message
  * to the backend's failure modes (validation / model-unavailable / etc.).
  */
@@ -35,7 +41,7 @@ function classify(status: number): ApiError["kind"] {
 async function request<T>(path: string, init?: RequestInit): Promise<T> {
   let res: Response;
   try {
-    res = await fetch(path, {
+    res = await fetch(`${API_BASE}${path}`, {
       headers: { "Content-Type": "application/json" },
       ...init,
     });
@@ -78,4 +84,13 @@ export function listTickets(params: {
   if (params.priority) qs.set("priority", params.priority);
   const suffix = qs.toString() ? `?${qs}` : "";
   return request(`/api/tickets${suffix}`);
+}
+
+export async function checkHealth(): Promise<boolean> {
+  try {
+    const res = await fetch(`${API_BASE}/api/health`);
+    return res.ok;
+  } catch {
+    return false;
+  }
 }

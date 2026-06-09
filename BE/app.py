@@ -4,16 +4,16 @@ import logging
 from flask import Flask
 from flask_cors import CORS
 
-from config import Config
+from config import get_config
 from extensions import db
 
 
-def create_app(config_object=Config):
+def create_app(config_object=None):
     app = Flask(__name__)
-    app.config.from_object(config_object)
+    app.config.from_object(config_object or get_config())
 
     logging.basicConfig(level=logging.INFO)
-    CORS(app)
+    CORS(app, origins=app.config["CORS_ORIGINS"])
     db.init_app(app)
 
     from routes import api  # imported here to avoid circular imports
