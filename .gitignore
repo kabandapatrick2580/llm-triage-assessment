@@ -1,0 +1,17 @@
+# Virtualenvs
+s_i_triage/
+.venv/
+venv/
+
+# Python
+__pycache__/
+*.py[cod]
+
+# Flask / SQLite
+BE/instance/
+*.db
+
+# Test / tooling
+.pytest_cache/
+
+.claude/
