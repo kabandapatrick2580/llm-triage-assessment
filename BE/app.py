@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/env python3
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 from pydantic import BaseModel, ValidationError
@@ -24,42 +24,42 @@ class TriageResult(BaseModel):
 
 def call_llm(text):
     prompt = f"""
-You are a customer support triage assistant.
+        You are a customer support triage assistant.
 
-Analyze the inbound message and return ONLY valid JSON.
+        Analyze the inbound message and return ONLY valid JSON.
 
-Allowed categories:
-- Billing
-- Technical Support
-- Admissions
-- Account Access
-- General Inquiry
-- Complaint
+        Allowed categories:
+        - Billing
+        - Technical Support
+        - Admissions
+        - Account Access
+        - General Inquiry
+        - Complaint
 
-Allowed priorities:
-- Low
-- Medium
-- High
-- Urgent
+        Allowed priorities:
+        - Low
+        - Medium
+        - High
+        - Urgent
 
-JSON schema:
-{{
-  "category": "",
-  "priority": "",
-  "customer_name": null,
-  "issue_summary": "",
-  "key_fields": {{
-    "transaction_code": null,
-    "email": null,
-    "phone": null,
-    "student_id": null
-  }},
-  "suggested_reply": ""
-}}
+        JSON schema:
+        {{
+        "category": "",
+        "priority": "",
+        "customer_name": null,
+        "issue_summary": "",
+        "key_fields": {{
+            "transaction_code": null,
+            "email": null,
+            "phone": null,
+            "student_id": null
+        }},
+        "suggested_reply": ""
+        }}
 
-Inbound message:
-{text}
-"""
+        Inbound message:
+        {text}
+        """
 
     response = requests.post(OLLAMA_URL, json={
         "model": MODEL,
