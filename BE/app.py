@@ -1,3 +1,4 @@
+#!/usr/bin/venv python
 import logging
 
 from flask import Flask
