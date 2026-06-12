@@ -11,6 +11,12 @@ __pycache__/
 BE/instance/
 *.db
 
+# UC2 / RAG runtime artifacts — regenerated on upload, never committed
+BE/uploads/*
+!BE/uploads/.gitkeep
+BE/chroma_db/*
+!BE/chroma_db/.gitkeep
+
 # Local secrets — real env values never get committed (.env.example is the template)
 .env
 *.env
