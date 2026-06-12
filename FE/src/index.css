@@ -1,0 +1,176 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  /* ---------------------------------------------------------------------
+     Buhangano brand palette — terracotta/rust primary + amber accent on a
+     warm neutral base.
+     --------------------------------------------------------------------- */
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 20 14% 12%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 20 14% 12%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 20 14% 12%;
+
+    /* Terracotta / rust — the primary brand colour. */
+    --primary: 16 72% 44%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 30 33% 96%;
+    --secondary-foreground: 20 14% 14%;
+
+    --muted: 30 24% 95%;
+    --muted-foreground: 24 8% 44%;
+
+    /* Soft amber tint used for hover/active surfaces. */
+    --accent: 36 90% 94%;
+    --accent-foreground: 18 72% 32%;
+
+    --destructive: 0 72% 51%;
+    --destructive-foreground: 0 0% 100%;
+
+    --success: 142 64% 38%;
+    --success-foreground: 0 0% 100%;
+
+    /* Amber — the brand accent. */
+    --warning: 36 92% 50%;
+    --warning-foreground: 20 20% 12%;
+
+    --border: 28 26% 90%;
+    --input: 28 26% 90%;
+    --ring: 16 72% 44%;
+
+    /* Brand tokens for hero gradients & marketing surfaces. */
+    --brand-rust: 14 78% 38%;
+    --brand-amber: 36 92% 52%;
+
+    --radius: 0.75rem;
+  }
+
+  .dark {
+    --background: 20 16% 8%;
+    --foreground: 30 20% 96%;
+
+    --card: 20 16% 11%;
+    --card-foreground: 30 20% 96%;
+
+    --popover: 20 16% 11%;
+    --popover-foreground: 30 20% 96%;
+
+    --primary: 18 80% 56%;
+    --primary-foreground: 20 20% 8%;
+
+    --secondary: 20 12% 18%;
+    --secondary-foreground: 30 20% 96%;
+
+    --muted: 20 12% 18%;
+    --muted-foreground: 28 10% 64%;
+
+    --accent: 18 40% 22%;
+    --accent-foreground: 36 90% 80%;
+
+    --destructive: 0 63% 51%;
+    --destructive-foreground: 0 0% 100%;
+
+    --success: 142 60% 46%;
+    --success-foreground: 20 20% 8%;
+
+    --warning: 36 92% 56%;
+    --warning-foreground: 20 20% 8%;
+
+    --border: 20 12% 22%;
+    --input: 20 12% 24%;
+    --ring: 18 80% 56%;
+
+    --brand-rust: 16 70% 46%;
+    --brand-amber: 36 92% 56%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  html,
+  body {
+    @apply h-full;
+  }
+  body {
+    @apply bg-background text-foreground antialiased;
+    font-feature-settings: "rlig" 1, "calt" 1;
+  }
+
+  /* Thin, theme-aware scrollbars */
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: hsl(var(--border)) transparent;
+  }
+  *::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+  *::-webkit-scrollbar-thumb {
+    background-color: hsl(var(--border));
+    border-radius: 9999px;
+  }
+  *::-webkit-scrollbar-track {
+    background: transparent;
+  }
+}
+
+@layer components {
+  /* Markdown / prose styling for assistant answers */
+  .prose-answer {
+    @apply text-sm leading-relaxed text-foreground;
+  }
+  .prose-answer p {
+    @apply my-2 first:mt-0 last:mb-0;
+  }
+  .prose-answer ul {
+    @apply my-2 list-disc space-y-1 pl-5;
+  }
+  .prose-answer ol {
+    @apply my-2 list-decimal space-y-1 pl-5;
+  }
+  .prose-answer h1,
+  .prose-answer h2,
+  .prose-answer h3 {
+    @apply mb-2 mt-4 font-semibold first:mt-0;
+  }
+  .prose-answer h1 {
+    @apply text-lg;
+  }
+  .prose-answer h2 {
+    @apply text-base;
+  }
+  .prose-answer h3 {
+    @apply text-sm;
+  }
+  .prose-answer a {
+    @apply font-medium text-primary underline underline-offset-2;
+  }
+  .prose-answer code {
+    @apply rounded bg-muted px-1.5 py-0.5 font-mono text-[0.8em];
+  }
+  .prose-answer pre {
+    @apply my-3 overflow-x-auto rounded-lg;
+  }
+  .prose-answer pre code {
+    @apply bg-transparent p-0;
+  }
+  .prose-answer blockquote {
+    @apply my-2 border-l-2 border-border pl-3 italic text-muted-foreground;
+  }
+  .prose-answer table {
+    @apply my-3 w-full border-collapse text-xs;
+  }
+  .prose-answer th,
+  .prose-answer td {
+    @apply border border-border px-2 py-1 text-left;
+  }
+}

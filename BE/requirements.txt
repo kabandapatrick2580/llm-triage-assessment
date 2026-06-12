@@ -24,3 +24,8 @@ pytest==8.4.2
 # Production hosting (not needed for local Ollama + SQLite)
 gunicorn==23.0.0
 psycopg2-binary==2.9.10
+
+# UC2 — RAG knowledge base (self-hosted retrieval)
+chromadb==0.5.5
+PyMuPDF==1.24.9
+python-dotenv==1.0.1
