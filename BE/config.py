@@ -23,7 +23,7 @@ class BaseConfig:
     # (any OpenAI-compatible hosted API, e.g. Groq) for production.
     LLM_PROVIDER = os.getenv("LLM_PROVIDER", "ollama")
 
-    # Local Ollama
+    # Local Ollama (UC1 triage uses the /api/generate endpoint).
     OLLAMA_URL = os.getenv("OLLAMA_URL", "http://localhost:11434/api/generate")
     OLLAMA_MODEL = os.getenv("OLLAMA_MODEL", "qwen2.5:3b")
 
@@ -36,6 +36,51 @@ class BaseConfig:
 
     CORS_ORIGINS = "*"
     DEBUG = False
+
+    # ------------------------------------------------------------------
+    # UC2 — Retrieval-augmented chat over a knowledge base (self-hosted).
+    # All values overridable by env so the same code runs local / Docker / CI.
+    # ------------------------------------------------------------------
+    SECRET_KEY = os.getenv("SECRET_KEY", "change-me-in-production")
+
+    # File uploads (PDF knowledge base).
+    UPLOAD_FOLDER = os.getenv(
+        "UPLOAD_FOLDER",
+        os.path.join(os.path.abspath(os.path.dirname(__file__)), "uploads"),
+    )
+    ALLOWED_EXTENSIONS = {"pdf"}
+    MAX_CONTENT_LENGTH = int(os.getenv("MAX_CONTENT_LENGTH", str(50 * 1024 * 1024)))
+
+    # ChromaDB vector store (persisted to local disk).
+    CHROMA_DIR = os.getenv(
+        "CHROMA_DIR",
+        os.path.join(os.path.abspath(os.path.dirname(__file__)), "chroma_db"),
+    )
+    CHROMA_COLLECTION = os.getenv("CHROMA_COLLECTION", "documents")
+
+    # Ollama endpoints for RAG chat + embeddings (self-hosted, no hosted API).
+    OLLAMA_BASE_URL = os.getenv("OLLAMA_BASE_URL", "http://localhost:11434")
+    OLLAMA_CHAT_URL = OLLAMA_BASE_URL + "/api/chat"
+    OLLAMA_EMBEDDINGS_URL = OLLAMA_BASE_URL + "/api/embeddings"
+    OLLAMA_TIMEOUT = int(os.getenv("OLLAMA_TIMEOUT", "300"))
+
+    # Chat + embedding models. RAG_CHAT_MODEL defaults to the same single local
+    # model UC1 uses, so one `ollama pull` powers the whole app.
+    RAG_CHAT_MODEL = os.getenv("RAG_CHAT_MODEL", os.getenv("OLLAMA_MODEL", "qwen2.5:3b"))
+    EMBEDDING_MODEL = os.getenv("EMBEDDING_MODEL", "nomic-embed-text")
+
+    # Chunking (characters — cheap and model-agnostic).
+    CHUNK_SIZE = int(os.getenv("CHUNK_SIZE", "1000"))
+    CHUNK_OVERLAP = int(os.getenv("CHUNK_OVERLAP", "150"))
+
+    # Retrieval. A chunk counts as relevant only at/above SIMILARITY_THRESHOLD;
+    # below it for every chunk, the answer is the abstention message below.
+    TOP_K = int(os.getenv("TOP_K", "5"))
+    SIMILARITY_THRESHOLD = float(os.getenv("SIMILARITY_THRESHOLD", "0.45"))
+    NOT_FOUND_MESSAGE = os.getenv(
+        "NOT_FOUND_MESSAGE",
+        "I could not find this information in the uploaded documents.",
+    )
 
 
 class DevelopmentConfig(BaseConfig):
@@ -60,3 +105,8 @@ def get_config():
     """Pick config from APP_ENV (default: development, i.e. local)."""
     env = os.getenv("APP_ENV", "development").lower()
     return ProductionConfig if env == "production" else DevelopmentConfig
+
+
+# Back-compat alias: the UC2/RAG modules read settings as `Config.X`. Resolve it
+# to the active config class so they see the right environment's values.
+Config = get_config()

@@ -9,7 +9,7 @@ A small Flask service that takes an inbound support message, asks a local LLM
 - [Ollama](https://ollama.com) running locally with the `qwen2.5:3b` model
 
 ```bash
-./test_ollama.sh   # installs the model and starts Ollama
+./run_ollama.sh   # installs the model and starts Ollama
 ```
 
 ## Run it
