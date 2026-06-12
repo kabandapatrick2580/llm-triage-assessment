@@ -7,6 +7,15 @@ class BaseConfig:
     SQLALCHEMY_DATABASE_URI = os.getenv("DATABASE_URI", "sqlite:///triage.db")
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
+    # Validate each pooled connection before use and drop ones idle past
+    # ~5 min. Free hosts spin down when idle and connection poolers (Supabase
+    # Supavisor) recycle server connections underneath us — without this a
+    # stale socket gets reused and psycopg2 raises "SSL error: bad record mac".
+    SQLALCHEMY_ENGINE_OPTIONS = {
+        "pool_pre_ping": True,
+        "pool_recycle": 300,
+    }
+
     MAX_TEXT_LENGTH = int(os.getenv("MAX_TEXT_LENGTH", "8000"))
     LLM_TIMEOUT = float(os.getenv("LLM_TIMEOUT", "60"))
 

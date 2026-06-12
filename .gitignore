@@ -11,6 +11,11 @@ __pycache__/
 BE/instance/
 *.db
 
+# Local secrets — real env values never get committed (.env.example is the template)
+.env
+*.env
+!*.env.example
+
 # Test / tooling
 .pytest_cache/
 
