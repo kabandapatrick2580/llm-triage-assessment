@@ -19,7 +19,7 @@ def test_triage_requires_text(client):
 
 def test_triage_persists_ticket(client, monkeypatch):
     monkeypatch.setattr(
-        "routes.triage_message", lambda *a, **k: dict(VALID_LLM_OUTPUT)
+        "routes.triage_routes.triage_message", lambda *a, **k: dict(VALID_LLM_OUTPUT)
     )
 
     resp = client.post("/api/triage", json={"text": "I was charged twice!"})
@@ -36,7 +36,7 @@ def test_triage_persists_ticket(client, monkeypatch):
 
 def test_triage_rejects_bad_category(client, monkeypatch):
     bad = dict(VALID_LLM_OUTPUT, category="Nonsense")
-    monkeypatch.setattr("routes.triage_message", lambda *a, **k: bad)
+    monkeypatch.setattr("routes.triage_routes.triage_message", lambda *a, **k: bad)
 
     resp = client.post("/api/triage", json={"text": "hello"})
     assert resp.status_code == 422
@@ -48,6 +48,6 @@ def test_triage_handles_llm_failure(client, monkeypatch):
     def boom(*a, **k):
         raise LLMError("Triage model is unavailable")
 
-    monkeypatch.setattr("routes.triage_message", boom)
+    monkeypatch.setattr("routes.triage_routes.triage_message", boom)
     resp = client.post("/api/triage", json={"text": "hello"})
     assert resp.status_code == 502
