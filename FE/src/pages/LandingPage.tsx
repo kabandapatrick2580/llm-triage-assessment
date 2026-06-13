@@ -94,6 +94,40 @@ export function LandingPage() {
         ))}
       </section>
 
+      {/* Walkthrough video */}
+      <section className="mx-auto mt-16 max-w-3xl">
+        <div className="mb-4 text-center">
+          <Badge variant="muted" className="mb-2">
+            Walkthrough
+          </Badge>
+          <h2 className="text-2xl font-bold tracking-tight">
+            Watch it run end-to-end
+          </h2>
+          <p className="mt-1 text-sm text-muted-foreground">
+            Self-hosted Ollama (Qwen 2.5) on a local machine, with both use
+            cases demonstrated live.
+          </p>
+        </div>
+
+        <div
+          className="relative w-full overflow-hidden rounded-xl border border-border shadow-sm"
+          style={{ paddingTop: "56.25%" }}
+        >
+          <iframe
+            loading="lazy"
+            title="Buhangano walkthrough — self-hosted LLM demo"
+            className="absolute left-0 top-0 h-full w-full border-0"
+            src="https://www.canva.com/design/DAHMV9V_yKY/_xijAl-k07i0Bedi4gzaLQ/watch?embed"
+            allowFullScreen
+            allow="fullscreen"
+          />
+        </div>
+        <p className="mt-2 text-center text-xs text-muted-foreground">
+          “Step 1: Run Ollama (Qwen 2.5) from My Local Computer” — by Kabanda
+          Patrick
+        </p>
+      </section>
+
       {/* Foot note */}
       <section className="mt-14 flex flex-col items-center gap-3 text-center">
         <BrandLogo />
